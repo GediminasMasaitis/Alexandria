@@ -321,7 +321,7 @@ void parse_moves(const std::string& moves, Position* pos) {
 }
 
 // Returns the bitboard of a piecetype
-Bitboard GetPieceBB(const Position* pos, const int piecetype) {
+Bitboard GetPieceBB(const Position* __restrict__ pos, const int piecetype) {
     return pos->GetPieceColorBB(piecetype, WHITE) | pos->GetPieceColorBB(piecetype, BLACK);
 }
 
@@ -422,7 +422,7 @@ int GetPieceType(const int piece) {
 }
 
 // Returns true if side has at least one piece on the board that isn't a pawn or the king, false otherwise
-bool BoardHasNonPawns(const Position* pos, const int side) {
+bool BoardHasNonPawns(const Position* __restrict__ pos, const int side) {
     return pos->Occupancy(side) ^ pos->GetPieceColorBB(PAWN, side) ^ pos->GetPieceColorBB(KING, side);
 }
 

@@ -43,7 +43,7 @@
 }
 
 // position evaluation
-[[nodiscard]] inline int EvalPosition(Position* pos) {
+[[nodiscard]] inline int EvalPosition(Position* __restrict__ pos) {
     int eval = EvalPositionRaw(pos);
     eval = ScaleMaterial(pos, eval);
     eval = eval * (200 - pos->get50MrCounter()) / 200;

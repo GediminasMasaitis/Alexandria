@@ -181,3 +181,9 @@ pgo:
 	$(PGO_MERGE)
 	$(CXX) $(CXXFLAGS) $(NATIVE) $(INSTRUCTIONS) $(PGO_USE) -MMD -MP -o $(EXE) $(SOURCES) $(LDFLAGS)
 	@rm -f *.gcda *.profraw *.o $(DEPENDS) *.d  profdata
+
+k: clean all
+	strip $(EXE)
+	md5sum ./$(EXE)
+	./$(EXE) bench
+	md5sum ./$(EXE)

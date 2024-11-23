@@ -78,7 +78,7 @@ bool IsDraw(Position* pos) {
 }
 
 // ClearForSearch handles the cleaning of the post and the info parameters to start search from a clean state
-void ClearForSearch(ThreadData* td) {
+void ClearForSearch(ThreadData* __restrict__ td) {
     // Extract data structures from ThreadData
     SearchInfo* info = &td->info;
     PvTable* pvTable = &td->pvTable;
@@ -111,7 +111,7 @@ static inline Bitboard AttacksTo(const Position* pos, int to, Bitboard occ) {
 }
 
 // inspired by the Weiss engine
-bool SEE(const Position* pos, const int move, const int threshold) {
+bool SEE(const Position* __restrict__ pos, const int move, const int threshold) {
 
     // We can't win any material from castling, nor can we lose any
     if (isCastle(move))
@@ -194,12 +194,12 @@ bool SEE(const Position* pos, const int move, const int threshold) {
     return side != Color[attacker];
 }
 
-Move GetBestMove(const PvTable* pvTable) {
+Move GetBestMove(const PvTable* __restrict__ pvTable) {
     return pvTable->pvArray[0][0];
 }
 
 // Starts the search process, this is ideally the point where you can start a multithreaded search
-void RootSearch(int depth, ThreadData* td, UciOptions* options) {
+void RootSearch(int depth, ThreadData* __restrict__ td, UciOptions* options) {
     // Init a thread_data object for each helper thread that doesn't have one already
     for (int i = threads_data.size(); i < options->Threads - 1; i++) {
         threads_data.emplace_back();
@@ -227,7 +227,7 @@ void RootSearch(int depth, ThreadData* td, UciOptions* options) {
 }
 
 // SearchPosition is the actual function that handles the search, it sets up the variables needed for the search, calls the AspirationWindowSearch function and handles the console output
-void SearchPosition(int startDepth, int finalDepth, ThreadData* td, UciOptions* options) {
+void SearchPosition(int startDepth, int finalDepth, ThreadData* __restrict__ td, UciOptions* options) {
     // variable used to store the score of the best move found by the search (while the move itself can be retrieved from the triangular PV table)
     int score = 0;
     int prevScore = 0;
@@ -300,7 +300,7 @@ void SearchPosition(int startDepth, int finalDepth, ThreadData* td, UciOptions* 
     }
 }
 
-int AspirationWindowSearch(int prev_eval, int depth, ThreadData* td) {
+int AspirationWindowSearch(int prev_eval, int depth, ThreadData* __restrict__ td) {
     int score;
     td->RootDepth = depth;
     SearchData* sd = &td->sd;
@@ -366,7 +366,7 @@ int AspirationWindowSearch(int prev_eval, int depth, ThreadData* td) {
 
 // Negamax alpha beta search
 template <bool pvNode>
-int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* td, SearchStack* ss) {
+int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* __restrict__ td, SearchStack* __restrict__ ss) {
     // Extract data structures from ThreadData
     Position* pos = &td->pos;
     SearchData* sd = &td->sd;
@@ -822,7 +822,7 @@ int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* td, 
 
 // Quiescence search to avoid the horizon effect
 template <bool pvNode>
-int Quiescence(int alpha, int beta, ThreadData* td, SearchStack* ss) {
+int Quiescence(int alpha, int beta, ThreadData* __restrict__ td, SearchStack* __restrict__ ss) {
     Position* pos = &td->pos;
     SearchData* sd = &td->sd;
     SearchInfo* info = &td->info;

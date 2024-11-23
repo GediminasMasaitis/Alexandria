@@ -60,7 +60,7 @@ static inline Bitboard NORTH(const Bitboard in, const int color) {
     return color == WHITE ? in >> 8 : in << 8;
 }
 
-static inline void PseudoLegalPawnMoves(Position* pos, int color, MoveList* list, MovegenType type) {
+static inline void PseudoLegalPawnMoves(Position* __restrict__ pos, int color, MoveList* __restrict__ list, MovegenType type) {
     const Bitboard enemy = pos->Occupancy(color ^ 1);
     const Bitboard ourPawns = pos->GetPieceColorBB(PAWN, color);
     const Bitboard rank4BB = color == WHITE ? 0x000000FF00000000ULL : 0x00000000FF000000ULL;
@@ -139,7 +139,7 @@ static inline void PseudoLegalPawnMoves(Position* pos, int color, MoveList* list
     }
 }
 
-static inline void PseudoLegalKnightMoves(Position* pos, int color, MoveList* list, MovegenType type) {
+static inline void PseudoLegalKnightMoves(Position* __restrict__ pos, int color, MoveList* __restrict__ list, MovegenType type) {
     Bitboard knights = pos->GetPieceColorBB(KNIGHT, color);
     const int knightType = GetPiece(KNIGHT, color);
     const bool genNoisy = type & MOVEGEN_NOISY;
@@ -165,7 +165,7 @@ static inline void PseudoLegalKnightMoves(Position* pos, int color, MoveList* li
     }
 }
 
-static inline void PseudoLegalSlidersMoves(Position *pos, int color, MoveList *list, MovegenType type) {
+static inline void PseudoLegalSlidersMoves(Position * __restrict__ pos, int color, MoveList * __restrict__ list, MovegenType type) {
     const bool genNoisy = type & MOVEGEN_NOISY;
     const bool genQuiet = type & MOVEGEN_QUIET;
     Bitboard boardOccupancy = pos->Occupancy(BOTH);
@@ -195,7 +195,7 @@ static inline void PseudoLegalSlidersMoves(Position *pos, int color, MoveList *l
     }
 }
 
-static inline void PseudoLegalKingMoves(Position* pos, int color, MoveList* list, MovegenType type) {
+static inline void PseudoLegalKingMoves(Position* __restrict__ pos, int color, MoveList* __restrict__ list, MovegenType type) {
     const int kingType = GetPiece(KING, color);
     const int from = KingSQ(pos, color);
     const bool genNoisy = type & MOVEGEN_NOISY;
@@ -244,7 +244,7 @@ static inline void PseudoLegalKingMoves(Position* pos, int color, MoveList* list
 }
 
 // generate moves
-void GenerateMoves(MoveList* move_list, Position* pos, MovegenType type) {
+void GenerateMoves(MoveList* __restrict__ move_list, Position* __restrict__ pos, MovegenType type) {
 
     assert(type == MOVEGEN_ALL || type == MOVEGEN_NOISY || type == MOVEGEN_QUIET);
 
@@ -415,7 +415,7 @@ bool IsPseudoLegal(Position* pos, Move move) {
     return true;
 }
 
-bool IsLegal(Position* pos, Move move) {
+bool IsLegal(Position* __restrict__ pos, Move move) {
 
     const int color = pos->side;
     const int ksq = KingSQ(pos, color);

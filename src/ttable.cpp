@@ -191,7 +191,7 @@ PackedMove MoveToTT(Move move) {
     return (move & 0xffff);
 }
 
-Move MoveFromTT(Position *pos, PackedMove packed_move) {
+Move MoveFromTT(Position * __restrict__ pos, PackedMove packed_move) {
     // It's important to preserve a move being null even it's being unpacked
     if (packed_move == NOMOVE)
         return NOMOVE;
